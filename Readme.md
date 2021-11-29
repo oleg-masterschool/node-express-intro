@@ -1,64 +1,27 @@
-```bash 
-npm init -y
-npm i express
-npm i -D nodemon
-```
 
-in package.json
-```json
-{ "dev": "nodemon index.js" }
-```
+app.get('/articles', (req, res) => {
+// const articles = [];
+// code to retrieve an article...
+// articles = content;
+res.json(content);
+});
 
-in index.js
-```js
-const express = require('express');
-const { PORT = 3000 } = process.env;
+app.post('/articles', (req, res) => {
+// code to add a new article...
+res.json(req.body);
+});
 
-const app = express();
+app.put('/articles/:id', (req, res) => {
+const { id } = req.params;
+// code to update an article...
+res.json(req.body);
+});
 
-app.listen(PORT, () => {
-    // if everything works fine, the console will show which port the application is listening to
-    console.log(`App listening at port ${PORT}`);
-}) 
-```
-npm run start
+app.delete('/articles/:id', (req, res) => {
+const { id } = req.params;
+// code to delete an article...
+res.json({ deleted: id });
+});
 
-## Creating a response
-```js
-app.get('/', (req, res) => {
-  // the logic for processing the request
-}); 
-
-// ....
-app.get('/', (req, res) => {
-    res.send(
-        `<html>
-        <body>
-          <h1>Response from your node js</h1>
-        </body>
-        </html>`
-    );
-}); 
-
-// automatic content type
-
-res.send('some text'); //  Content-Type: text/plain
-res.send('<p>some html</p>'); //  Content-Type: text/html
-res.send({ some: 'json' }); //  Content-Type: application/json
-
-//
-app.get('/', (req, res) => {
-    res.status(404);
-    res.send('<h1>Page not found</h1>');
-}); 
-```
-## Request
-```js
-app.get('/', (req, res) => {
-  res.send(req.query);
-}); 
-```
-
-
-
+app.listen(3000, () => console.log('server started'));
 
