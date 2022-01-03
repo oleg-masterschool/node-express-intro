@@ -1,49 +1,70 @@
 const express = require('express');
-const path = require("path");
-const { PORT = 3000 } = process.env;
+const bodyParser = require('body-parser');
+const { content } = require('./data/articles.json');
+const uuid = require('uuid');
 
 const app = express();
 
+const { PORT = 3001 } = process.env;
 app.listen(PORT, () => {
-    // if everything works fine, the console will show which port the application is listening to
     console.log(`App listening at port ${PORT}`);
 });
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
-app.get('/', (req, res) => {
-    res.send(path.join(__dirname, 'public/index.html'))
+
+app.use(bodyParser.json());
+
+// resource
+
+// GET => SELECT
+app.get('/articles', (req, res) => {
+// const articles = [];
+// code to retrieve an article...
+    //open DB connection
+    // query DB
+    res.json(content);
 });
 
-app.post('/test', (req, res) => {
-    res.send({
-        "request": `${req.status}`,
-        "body": `${req.body.test}`,
-        "test": "value",
-        "name": "Paul",
-        "surname": "Atreides", });
-});
+app.get('/articles/:id', (req, res) => {
+    const articles = [];
+    if (id && id.includes('some_unique_id')) {
 
-
-// here we have data
-const users = [
-    { name: 'Jane', age: 22 },
-    { name: 'Hugo', age: 30 },
-    { name: 'Juliana', age: 48 },
-    { name: 'Vincent', age: 51 }
-];
-
-// here's where we'll do our routing
-app.get('/users/:user_id', (req, res) => {
-    if (!users[req.params.user_id]) {
-        res.status(404).send(`This user doesn't exist`);
-        // it's important we don't forget to exit from the function
-        return;
+        // filtering function
+        // exchange authorId to author name
+        res.json(content);
     }
 
-    const { name, age } = users[req.params.user_id];
-
-    res.send(`User ${name}, ${age} years old ${req.query.test}`);
+    // logs the error
+    res.status(404).json({error: 'ID is malformed'})
+    // code to retrieve an article...
+    //open DB connection
+    // query DB
 });
 
-// now the client only has access to public files
 
+app.post('/articles', (req, res) => {
+// code to add a new article...
+    const article = req.body;
+    // author / author id is required
+    // test for required attributes
+    // if (Object.keys(article).includes('id'))
+    // if (Object.keys(article).includes('author'))
+    // if (Object.keys(article).includes('text'))
+// saved in DB
+    const id = uuid.v4();
+    res.status(201).json({ id });
+});
+
+app.put('/articles/:id', (req, res) => {
+    const { id } = req.params;
+// code to update an article...
+    res.json(req.body);
+});
+
+app.delete('/articles/:id', (req, res) => {
+    const { id } = req.params;
+// code to delete an article...
+    res.json({ deleted: id });
+});
+// POST => CREATE
+// PUT => UPDATE
+// PATCH
+// DELETE => DELETE
